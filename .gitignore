@@ -1,0 +1,6 @@
+*~
+.*.sw?
+/pipewire_timestamp
+/pipewire_timestamp.d
+/pipewire_timestamp.o
+/tags

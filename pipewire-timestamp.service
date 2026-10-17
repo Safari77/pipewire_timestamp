@@ -1,0 +1,32 @@
+[Unit]
+Description=PipeWire Audio Recorder with Subtitle Timestamps
+Documentation=man:systemd.service(5)
+# Ensure PipeWire is up before this service starts
+After=pipewire.service
+Wants=pipewire.service
+PartOf=pipewire.service
+
+[Service]
+Type=notify
+NotifyAccess=main
+
+# Load variables from the configuration file
+EnvironmentFile=%h/.config/pipewire-timestamp/recorder.conf
+
+# Optional: Ensure the destination directory exists before starting.
+# (Adjust this path to match where you want the recordings saved)
+#ExecStartPre=/usr/bin/mkdir -p /var/luser/data
+
+# Run the executable, passing the variables from the config file
+ExecStart=%h/.local/bin/pipewire_timestamp -o ${OUTPUT_FILE} $EXTRA_ARGS
+
+# Restart policy: Automatically restart if the app crashes or gets killed
+Restart=always
+RestartSec=1
+
+# Real-time audio processing permissions
+LimitRTPRIO=95
+LimitMEMLOCK=infinity
+
+[Install]
+WantedBy=default.target
